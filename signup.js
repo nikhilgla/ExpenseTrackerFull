@@ -22,7 +22,7 @@ async function onSubmit(){
     }
     console.log(myObj);
 
-    await axios.post('http://localhost:6000/expense/users', myObj)
+    await axios.post('http://localhost:5000/expense/users', myObj)
         .then((ele) => {
             console.log(ele.data);
         })

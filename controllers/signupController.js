@@ -10,7 +10,7 @@ exports.postData = async (req,res,next)=>{
       name: name,
       email: email,
       password: password
-    }).then(console.log('new User created'))
+    }).then(console.log('new User created')).catch((err) => { console.log(err); })
     res.status(201).json({newUserDetail: data})
 
 };
