@@ -26,7 +26,7 @@ async function onSubmit(){
         .then((ele) => {
             console.log(ele.data);
         })
-        .catch((err) => { console.log(err); })
+        .catch((err) => { console.log("abcd",err); })
 
     //resetForm();
 }

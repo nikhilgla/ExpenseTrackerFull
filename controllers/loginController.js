@@ -1,4 +1,5 @@
 const Users = require('../models/users');
+const bcrypt = require('bcrypt');
 
 exports.checkData = async (req, res, next) => {
     console.log(req.body, "abcd");
@@ -13,21 +14,27 @@ exports.checkData = async (req, res, next) => {
     // }).then(console.log('new User created')).catch((err) => { console.log(err); })
 
     const data = await Users.findAll({ where: { email: email } })
+
     console.log(data);
     try {
         if (data[0] == null) {
             res.status(404).json({ data: "not found" })
         }
-        else if (data[0].password == password) {
-            console.log("found it");
-            res.status(202).json({ data: "User Login Successful" })
-        }
         else {
-            console.log("not found");
-            res.status(401).json({ data: "User not Authorized" })
+            bcrypt.compare(password, data[0].password, (err, ress) => {
+                if (ress === true) {
+                    console.log("found it");
+                    res.status(202).json({ data: "User Login Successful" });
+                }
+                else {
+                    console.log("not found");
+                    res.status(401).json({ data: "User not Authorized" });
+                }
+            })
+
         }
     }
-    catch(err){
+    catch (err) {
         console.log(err);
     }
 
