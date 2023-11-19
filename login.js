@@ -25,6 +25,7 @@ async function onSubmit(){
     await axios.post('http://localhost:5000/expense/login', myObj)
         .then((ele) => {
             console.log(ele.data);
+            window.location.href = './expenseFront/expense.html'; 
         })
         .catch((err) => { console.log("abcd",err); })
 

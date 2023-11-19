@@ -13,11 +13,13 @@ app.set('view engine', 'ejs');
 app.set('views', 'views');
 
 const signupRoutes = require('./routes/signupRoute');
+const expenseRoutes = require('./routes/expenseRoute');
 
 app.use(bodyParser.json({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(signupRoutes);
+app.use(expenseRoutes);
 
 sequelize
   .sync()
