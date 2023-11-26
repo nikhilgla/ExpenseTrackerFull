@@ -1,5 +1,10 @@
 const Users = require('../models/users');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+
+function generateAccessToken(id){
+    return jwt.sign({userId : id} , 'supersecret')
+}
 
 exports.checkData = async (req, res, next) => {
     console.log(req.body, "abcd");
@@ -18,17 +23,17 @@ exports.checkData = async (req, res, next) => {
     console.log(data);
     try {
         if (data[0] == null) {
-            res.status(404).json({ data: "not found" })
+            return res.status(404).json({success:false , message: "not found" })
         }
         else {
             bcrypt.compare(password, data[0].password, (err, ress) => {
                 if (ress === true) {
                     console.log("found it");
-                    res.status(202).json({ data: "User Login Successful" });
+                    return res.status(202).json({success:true , message: "User Login Successful" , token : generateAccessToken(data[0].id)});
                 }
                 else {
                     console.log("not found");
-                    res.status(401).json({ data: "User not Authorized" });
+                    return res.status(401).json({success:false , message: "User not Authorized" });
                 }
             })
 

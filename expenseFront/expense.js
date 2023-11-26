@@ -12,7 +12,8 @@ myForm.addEventListener('submit', onSubmit);
 var total = Number("0");
 
 window.addEventListener('DOMContentLoaded', () => {
-    axios.get('http://localhost:5000/expense/data')
+    const token = localStorage.getItem('token');
+    axios.get('http://localhost:5000/expense/data' , {headers : {"Authorization" : token}} )
         .then((ele) => {
             console.log(ele);
 
@@ -35,8 +36,8 @@ async function onSubmit(e) {
         description:emailInput.value
     }
     console.log(myObj);
-    
-        await axios.post('http://localhost:5000/expense/data', myObj)
+    const token = localStorage.getItem('token');
+        await axios.post('http://localhost:5000/expense/data', myObj , {headers : {"Authorization" : token}})
             .then((ele) => {
                 console.log(ele.data);
                 showOnScreen(ele.data.newUserDetail)
@@ -47,27 +48,18 @@ async function onSubmit(e) {
 }
 
 async function showOnScreen(userObj) {
-    // this.total = this.total + Number(userObj.amount);
-    // console.log(this.total);
-
     const childli = `<li class="item" id=${userObj.title}>${userObj.title} - ${userObj.price} - ${userObj.description} <button onclick=deleteExp('${userObj.title}','${userObj.id}') class="btn btndel btn-danger btn-sm float-right delete">X</button>  <button onclick=insExp('${userObj.title}','${userObj.id}') class="btn btn-success btn-sm float-right delete">Ins</button></li>`
     itemList.innerHTML = itemList.innerHTML + childli;
-
-    // const childtotal = `<h3>Total Value worth of Products : ${this.total}</h3>`;
-    // tot.innerHTML = childtotal;
-
 }
 
 async function deleteExp(name, id ) {
+
     const cc = document.getElementById(name);
     //var li = cc.parentElement;
     itemList.removeChild(cc);
     
-    // this.total = this.total - Number(amount);
-    // const childtotal = `<h3>Total Value worth of Products : ${this.total}</h3>`;
-    // tot.innerHTML = childtotal;
-
-    await axios.delete(`http://localhost:5000/expense/data/${id}`)
+    const token = localStorage.getItem('token');
+    await axios.delete(`http://localhost:5000/expense/data/${id}` , {headers : {"Authorization" : token}})
         .then((ele) => { console.log(ele.data) })
         .catch((err) => { console.log(err); });
 }

@@ -3,14 +3,15 @@ const path = require('path');
 const express = require('express');
 
 const expenseController = require('../controllers/expenseController');
+const userauthentication =require('../middleware/auth');
 
 const router = express.Router();
 
-router.get('/expense/data', expenseController.getData)
+router.get('/expense/data', userauthentication.authenticate , expenseController.getData)
 
-router.post('/expense/data' , expenseController.postData )
+router.post('/expense/data' , userauthentication.authenticate , expenseController.postData )
 
-router.delete('/expense/data/:delId' , expenseController.deleteData);
+router.delete('/expense/data/:delId' , userauthentication.authenticate , expenseController.deleteData);
 
 router.post('/expense/data/ins/:insId' , expenseController.insertData);
 

@@ -1,7 +1,9 @@
+const { where } = require('sequelize');
 const Expense = require('../models/expensetable');
 
 exports.getData = async (req,res,next) =>{
-    const data = await Expense.findAll();
+    const data = await Expense.findAll({where : {userstableId : req.user.id}});
+    // {where : {userstableId : req.user.id}}
     res.status(200).json({AllData:data})
 };
 
@@ -13,7 +15,8 @@ exports.postData = async (req,res,next) =>{
     const data = await Expense.create({
       title: title,
       price: price,
-      description: description
+      description: description ,
+      userstableId: req.user.id
     }).then(console.log('new record created'))
     res.status(201).json({newUserDetail: data})
 };
@@ -21,10 +24,20 @@ exports.postData = async (req,res,next) =>{
 exports.deleteData = async (req,res,next) =>{
   console.log(req.params.delId);
   console.log(req.body)
-  const item = await Expense.findByPk(req.params.delId);
-  await item.destroy();
-  console.log("deleted");
-  res.status(202).json({newUserDetail: item})
+  Expense.destroy({where : {id: req.params.delId , userstableId : req.user.id }})
+  .then((noofrows)=>{
+    if(noofrows === 0 ){
+    return res.status(404).json({success:false , message : "Expense doesnt belong to the user"})
+    }
+    console.log("deleting");
+    return res.status(202).json({success:true , message : "Expense is deleted successfuly"})
+  })
+  .catch((err)=>{
+    console.log(err);
+    return res.status(500).json({success:false , message : "not deleting some error"})
+  })
+
+  
 };
 
 exports.insertData = async (req,res,next) =>{
