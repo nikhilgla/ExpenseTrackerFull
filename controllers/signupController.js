@@ -2,7 +2,7 @@ const Users = require('../models/users');
 const bcrypt  = require('bcrypt');
 
 exports.postData = async (req,res,next)=>{
-    console.log(req.body , "abcd");
+    console.log(req.body , "is being created as new user");
 
     const name = req.body.name;
     const email = req.body.email;

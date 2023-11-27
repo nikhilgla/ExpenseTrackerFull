@@ -24,7 +24,7 @@ async function onSubmit(){
 
     await axios.post('http://localhost:5000/user/signup', myObj)
         .then((ele) => {
-            console.log(ele.data);
+            // console.log(ele.data);
             window.location.href = './login.html';
         })
         .catch((err) => { console.log(err); })

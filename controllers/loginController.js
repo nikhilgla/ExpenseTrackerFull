@@ -3,11 +3,11 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
 function generateAccessToken(id){
-    return jwt.sign({userId : id} , 'supersecret')
+    return jwt.sign({userId : id} , 'supersecret')//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 }
 
 exports.checkData = async (req, res, next) => {
-    console.log(req.body, "abcd");
+    console.log(req.body ,  "is being checked in login controller");
 
     //const name = req.body.name;
     const email = req.body.email;
@@ -20,7 +20,7 @@ exports.checkData = async (req, res, next) => {
 
     const data = await Users.findAll({ where: { email: email } })
 
-    console.log(data);
+    // console.log(data);
     try {
         if (data[0] == null) {
             return res.status(404).json({success:false , message: "not found" })

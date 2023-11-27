@@ -25,13 +25,13 @@ async function onSubmit(){
     await axios.post('http://localhost:5000/user/login', myObj)
         .then((ele) => {
             alert(ele.data.message);
-            console.log(ele.data);
+            // console.log(ele.data);
             localStorage.setItem('token' , ele.data.token);
             window.location.href = './expense.html'; 
         })
         .catch((err) => { 
             alert((err));
-            console.log("abcd",err); })
+            console.log("error in User details",err); })
 
     //resetForm();
 }
