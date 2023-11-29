@@ -20,6 +20,7 @@ app.set('views', 'views');
 const signupRoutes = require('./routes/signupRoute');
 const expenseRoutes = require('./routes/expenseRoute');
 const purchaseRoutes = require('./routes/purchaseRoute');
+const premiumRoutes = require('./routes/premiumRoute');
 
 app.use(bodyParser.json({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
@@ -27,6 +28,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(signupRoutes);
 app.use(expenseRoutes);
 app.use(purchaseRoutes);
+app.use(premiumRoutes);
 
 Users.hasMany(Expense);
 Expense.belongsTo(Users);

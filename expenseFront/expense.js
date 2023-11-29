@@ -5,6 +5,10 @@ const price = document.querySelector('#price');
 const titleInput = document.querySelector('#title');
 const emailInput = document.querySelector('#description');
 var itemList = document.querySelector('.items')
+var leaderItems = document.querySelector('.leaderitems');
+var showleader = document.querySelector('.showleader');
+var showExpense = document.querySelector('.showExpense');
+
 // var tot = document.querySelector('.totalamount');
 
 myForm.addEventListener('submit', onSubmit);
@@ -16,14 +20,31 @@ window.addEventListener('DOMContentLoaded', () => {
     axios.get('http://localhost:5000/expense/data', { headers: { "Authorization": token } })
         .then((ele) => {
             console.log(ele);
+            if(ele.data.AllData.length>0){
+            const ch = 'Expense List';
+            showExpense.innerHTML = showExpense.innerHTML + ch;
+            }
 
             for (var i = 0; i < ele.data.AllData.length; i++) {
                 showOnScreen(ele.data.AllData[i]);
             }
+            checkPremium(ele.data.isPremium);
         })
         .catch((err) => { console.log(err); })
 
 })
+
+async function checkPremium(ele){
+    if(ele === true){
+        console.log("premium hai bhai");
+        document.getElementById("rzp-button1").style.visibility = "hidden";
+        document.getElementById("pree").style.visibility = "visible";
+        document.getElementById("ldr-nav").style.visibility = "visible";
+    }
+    else{
+        console.log("nhi hai premium");
+    }
+}
 
 async function onSubmit(e) {
     e.preventDefault();
@@ -50,6 +71,11 @@ async function onSubmit(e) {
 async function showOnScreen(userObj) {
     const childli = `<li class="item" id=${userObj.title}>${userObj.title} - ${userObj.price} - ${userObj.description} <button onclick=deleteExp('${userObj.title}','${userObj.id}') class="btn btndel btn-danger btn-sm float-right delete">X</button>  <button onclick=insExp('${userObj.title}','${userObj.id}') class="btn btn-success btn-sm float-right delete">Ins</button></li>`
     itemList.innerHTML = itemList.innerHTML + childli;
+}
+
+async function showleaderboard(userObj) {
+    const childli = `<li class="litem" id=${userObj.name}>${userObj.name} - ${userObj.totalAmount} </li>`
+    leaderItems.innerHTML = leaderItems.innerHTML + childli;
 }
 
 async function deleteExp(name, id) {
@@ -96,7 +122,7 @@ async function onPaybutton() {
 
     const token = localStorage.getItem('token');
     const response = await axios.get('http://localhost:5000/purchase/buypremium', { headers: { "Authorization": token } });
-    console.log(response);
+    console.log(response, "<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
 
     var options = {
         "key" : response.data.key_id ,
@@ -109,6 +135,7 @@ async function onPaybutton() {
             {headers:{"Authorization":token}})
 
             alert('You are a Premium User now')
+            checkPremium(true);
         }
     }
 
@@ -121,4 +148,25 @@ async function onPaybutton() {
         alert('Something went wrong in RZP');
         
     })
+}
+
+async function onLeaderButton(){
+    console.log("inside leaderboard button");
+
+    const token = localStorage.getItem('token');
+    const response = await axios.get('http://localhost:5000/premium/showleader', { headers: { "Authorization": token } });
+
+    console.log(response.data.leaderDetails);
+    
+    const ch = 'LeaderBoard';
+    showleader.innerHTML = showleader.innerHTML + ch;
+
+    response.data.leaderDetails.forEach(element => {
+
+
+        showleaderboard(element);
+        
+    });
+
+
 }

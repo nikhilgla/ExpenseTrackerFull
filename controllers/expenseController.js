@@ -4,7 +4,7 @@ const Expense = require('../models/expensetable');
 exports.getData = async (req,res,next) =>{
     const data = await Expense.findAll({where : {userstableId : req.user.id}});
     // {where : {userstableId : req.user.id}}
-    res.status(200).json({AllData:data})
+    res.status(200).json({AllData:data , isPremium:req.user.ispremium});
 };
 
 exports.postData = async (req,res,next) =>{
