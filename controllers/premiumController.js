@@ -7,6 +7,7 @@ const sequelize = require('../util/database');
 exports.getLeaders = async (req, res, next) => {
     console.log("inside leaderboard controller");
     try {
+        //METHOD 1
         // const users = await User.findAll();
         // const expenses = await Expense.findAll();
 
@@ -28,15 +29,22 @@ exports.getLeaders = async (req, res, next) => {
         // });
         // userLeaderDetails.sort((a,b)=> b.totalAmount - a.totalAmount )
 
+
+        //METHOD 2
+        // const leaderboardofusers = await User.findAll({
+        //     attributes: ['id', 'name', [sequelize.fn('sum', sequelize.col('expensetables.price')), 'totalAmount']],
+        //     include: [
+        //     {
+        //     model: Expense, attributes: []
+        //     }
+        //     ],
+        //     group: ['userstable.id'], order: [['totalAmount', 'DESC']] 
+        //     })
+
         const leaderboardofusers = await User.findAll({
-            attributes: ['id', 'name', [sequelize.fn('sum', sequelize.col('expensetables.price')), 'totalAmount']],
-            include: [
-            {
-            model: Expense, attributes: []
-            }
-            ],
-            group: ['userstable.id'], order: [['totalAmount', 'DESC']]
-            })
+            attributes:['id' , 'name' , 'totalAmount'],
+            order: [['totalAmount', 'DESC']]
+        })
 
         res.status(200).json({leaderDetails :leaderboardofusers});
 

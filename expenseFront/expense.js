@@ -162,11 +162,6 @@ async function onLeaderButton(){
     showleader.innerHTML = showleader.innerHTML + ch;
 
     response.data.leaderDetails.forEach(element => {
-
-
         showleaderboard(element);
-        
     });
-
-
 }

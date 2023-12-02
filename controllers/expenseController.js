@@ -1,5 +1,6 @@
-const { where } = require('sequelize');
+const { where, INTEGER } = require('sequelize');
 const Expense = require('../models/expensetable');
+const User = require('../models/users');
 
 exports.getData = async (req,res,next) =>{
     const data = await Expense.findAll({where : {userstableId : req.user.id}});
@@ -18,6 +19,8 @@ exports.postData = async (req,res,next) =>{
       description: description ,
       userstableId: req.user.id
     }).then(console.log('new record created'))
+    const newprice = Number(price) + req.user.totalAmount;
+    await req.user.update({totalAmount : newprice });
     res.status(201).json({newUserDetail: data})
 };
 

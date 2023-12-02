@@ -19,7 +19,8 @@ const Users = sequelize.define('userstable', {
     type: Sequelize.STRING,
     allowNull: false
   },
-  ispremium: Sequelize.BOOLEAN
+  ispremium: Sequelize.BOOLEAN,
+  totalAmount:Sequelize.DOUBLE
 });
 
 module.exports = Users;

@@ -15,6 +15,8 @@ exports.postData = async (req,res,next)=>{
       const data = await Users.create({
         name: name,
         email: email,
+        ispremium :false,
+        totalAmount : 0,
         password:hash
       }).then(console.log('new User created')).catch((err) => { console.log(err); })
       res.status(201).json({newUserDetail: data})
