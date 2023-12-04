@@ -12,7 +12,6 @@ var showExpense = document.querySelector('.showExpense');
 // var tot = document.querySelector('.totalamount');
 
 myForm.addEventListener('submit', onSubmit);
-
 // var total = Number("0");
 
 window.addEventListener('DOMContentLoaded', () => {
@@ -20,9 +19,9 @@ window.addEventListener('DOMContentLoaded', () => {
     axios.get('http://localhost:5000/expense/data', { headers: { "Authorization": token } })
         .then((ele) => {
             console.log(ele);
-            if(ele.data.AllData.length>0){
-            const ch = 'Expense List';
-            showExpense.innerHTML = showExpense.innerHTML + ch;
+            if (ele.data.AllData.length > 0) {
+                const ch = 'Expense List';
+                showExpense.innerHTML = showExpense.innerHTML + ch;
             }
 
             for (var i = 0; i < ele.data.AllData.length; i++) {
@@ -34,14 +33,14 @@ window.addEventListener('DOMContentLoaded', () => {
 
 })
 
-async function checkPremium(ele){
-    if(ele === true){
+async function checkPremium(ele) {
+    if (ele === true) {
         console.log("premium hai bhai");
         document.getElementById("rzp-button1").style.visibility = "hidden";
         document.getElementById("pree").style.visibility = "visible";
         document.getElementById("ldr-nav").style.visibility = "visible";
     }
-    else{
+    else {
         console.log("nhi hai premium");
     }
 }
@@ -49,27 +48,31 @@ async function checkPremium(ele){
 async function onSubmit(e) {
     e.preventDefault();
     // console.log(titleInput.value);
+    if (titleInput.value != '' && price.value != '' && emailInput.value != '') {
 
+        let myObj = {
+            title: titleInput.value,
+            price: price.value,
+            description: emailInput.value
+        }
+        console.log(myObj);
+        const token = localStorage.getItem('token');
+        await axios.post('http://localhost:5000/expense/data', myObj, { headers: { "Authorization": token } })
+            .then((ele) => {
+                console.log(ele.data);
+                showOnScreen(ele.data.newExpenseDetail)
+            })
+            .catch((err) => { console.log(err); })
 
-    let myObj = {
-        title: titleInput.value,
-        price: price.value,
-        description: emailInput.value
+        resetForm();
     }
-    console.log(myObj);
-    const token = localStorage.getItem('token');
-    await axios.post('http://localhost:5000/expense/data', myObj, { headers: { "Authorization": token } })
-        .then((ele) => {
-            console.log(ele.data);
-            showOnScreen(ele.data.newUserDetail)
-        })
-        .catch((err) => { console.log(err); })
-
-    resetForm();
+    else {
+        alert('Please fill all details of the expenditure');
+    }
 }
 
 async function showOnScreen(userObj) {
-    const childli = `<li class="item" id=${userObj.title}>${userObj.title} - ${userObj.price} - ${userObj.description} <button onclick=deleteExp('${userObj.title}','${userObj.id}') class="btn btndel btn-danger btn-sm float-right delete">X</button>  <button onclick=insExp('${userObj.title}','${userObj.id}') class="btn btn-success btn-sm float-right delete">Ins</button></li>`
+    const childli = `<li class="item" id=${userObj.title}>${userObj.title} - ${userObj.price} - ${userObj.description} <button onclick=deleteExp('${userObj.title}','${userObj.id}') class="btn btndel btn-danger btn-sm float-right delete">X</button>  <button onclick=insExp('${userObj.title}','${userObj.id}') class="btn btn-success btn-sm float-right delete" style=" visibility:hidden;">Ins</button></li>`
     itemList.innerHTML = itemList.innerHTML + childli;
 }
 
@@ -125,14 +128,14 @@ async function onPaybutton() {
     console.log(response, "<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
 
     var options = {
-        "key" : response.data.key_id ,
-        "order_id" : response.data.order.id ,
-        "handler" : async function(response){
-            await axios.post('http://localhost:5000/purchase/updatetransactionstatus' , {
-                order_id :options.order_id,
-                payment_id:response.razorpay_payment_id ,
+        "key": response.data.key_id,
+        "order_id": response.data.order.id,
+        "handler": async function (response) {
+            await axios.post('http://localhost:5000/purchase/updatetransactionstatus', {
+                order_id: options.order_id,
+                payment_id: response.razorpay_payment_id,
             },
-            {headers:{"Authorization":token}})
+                { headers: { "Authorization": token } })
 
             alert('You are a Premium User now')
             checkPremium(true);
@@ -144,20 +147,20 @@ async function onPaybutton() {
 
     rzp1.on('payment.failed', function (response) {
 
-        console.log(">>>>>>>>>>>>>>>>" ,response , "<<<<<<<<<<<<<<<<<<");
+        console.log(">>>>>>>>>>>>>>>>", response, "<<<<<<<<<<<<<<<<<<");
         alert('Something went wrong in RZP');
-        
+
     })
 }
 
-async function onLeaderButton(){
+async function onLeaderButton() {
     console.log("inside leaderboard button");
 
     const token = localStorage.getItem('token');
     const response = await axios.get('http://localhost:5000/premium/showleader', { headers: { "Authorization": token } });
 
     console.log(response.data.leaderDetails);
-    
+
     const ch = 'LeaderBoard';
     showleader.innerHTML = showleader.innerHTML + ch;
 

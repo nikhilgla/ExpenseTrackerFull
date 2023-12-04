@@ -13,7 +13,7 @@ router.post('/expense/data' , userauthentication.authenticate , expenseControlle
 
 router.delete('/expense/data/:delId' , userauthentication.authenticate , expenseController.deleteData);
 
-router.post('/expense/data/ins/:insId' , expenseController.insertData);
+router.post('/expense/data/ins/:insId' , userauthentication.authenticate , expenseController.insertData);
 
 
 module.exports = router;

@@ -14,6 +14,8 @@ async function onSubmit(){
     console.log("inside submit button");
 
     console.log(nameInput.value , emailInput.value );
+    if(nameInput.value != '' && emailInput.value!=''  && passwordInput.value!='' )
+    {
 
     let myObj = {
         name: nameInput.value,
@@ -28,6 +30,10 @@ async function onSubmit(){
             window.location.href = './login.html';
         })
         .catch((err) => { console.log(err); })
+    }
+    else{
+        alert('Please fill all details')
+    }
 
     //resetForm();
 }

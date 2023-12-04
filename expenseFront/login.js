@@ -14,6 +14,7 @@ async function onSubmit(){
     console.log("inside submit button");
 
     console.log( emailInput.value );
+    if(emailInput.value !='' && passwordInput.value!=''){
 
     let myObj = {
         // name: nameInput.value,
@@ -32,6 +33,10 @@ async function onSubmit(){
         .catch((err) => { 
             alert((err));
             console.log("error in User details",err); })
+        }
+        else{
+            alert('Please fill the email and password')
+        }
 
     //resetForm();
 }
