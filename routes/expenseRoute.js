@@ -7,13 +7,13 @@ const userauthentication =require('../middleware/auth');
 
 const router = express.Router();
 
-router.get('/expense/data', userauthentication.authenticate , expenseController.getData)
+router.get('/data', userauthentication.authenticate , expenseController.getData)
 
-router.post('/expense/data' , userauthentication.authenticate , expenseController.postData )
+router.post('/data' , userauthentication.authenticate , expenseController.postData )
 
-router.delete('/expense/data/:delId' , userauthentication.authenticate , expenseController.deleteData);
+router.delete('/data/:delId' , userauthentication.authenticate , expenseController.deleteData);
 
-router.post('/expense/data/ins/:insId' , userauthentication.authenticate , expenseController.insertData);
+router.post('/data/ins/:insId' , userauthentication.authenticate , expenseController.insertData);
 
 
 module.exports = router;

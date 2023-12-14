@@ -7,6 +7,7 @@ const sequelize = require('./util/database');
 const Expense = require('./models/expensetable');
 const Users = require('./models/users');
 const Order = require('./models/orders'); 
+const Forgotpassword =require('./models/forgotpassword');
 
 const cors = require('cors');
 
@@ -25,17 +26,20 @@ const forgotRoutes = require('./routes/forgotRoute')
 app.use(bodyParser.json({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use(signupRoutes);
-app.use(expenseRoutes);
-app.use(purchaseRoutes);
-app.use(premiumRoutes);
-app.use(forgotRoutes);
+app.use('/user',signupRoutes);
+app.use('/expense',expenseRoutes);
+app.use('/purchase',purchaseRoutes);
+app.use('/premium',premiumRoutes);
+app.use('/password',forgotRoutes);
 
 Users.hasMany(Expense);
 Expense.belongsTo(Users);
 
 Users.hasMany(Order);
 Order.belongsTo(Users);
+
+Users.hasMany(Forgotpassword);
+Forgotpassword.belongsTo(Users);
 
 sequelize
   .sync()

@@ -27,6 +27,7 @@ async function onSubmit(){
         .then((ele) => {
             // alert(ele.data.message);
             console.log(ele.data);
+            alert(ele.data.message)
         })
         .catch((err) => { 
             alert((err));

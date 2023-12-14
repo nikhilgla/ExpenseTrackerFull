@@ -7,7 +7,7 @@ const userauthentication =require('../middleware/auth');
 
 const router = express.Router();
 
-router.get('/premium/showleader', userauthentication.authenticate , premiumController.getLeaders)
+router.get('/showleader', userauthentication.authenticate , premiumController.getLeaders)
 
 // router.post('/purchase/updatetransactionstatus' , userauthentication.authenticate , purchaseController.updateStatus )
 
