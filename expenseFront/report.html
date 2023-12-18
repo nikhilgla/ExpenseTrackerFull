@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Expense app</title>
+    <title>Report</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
 </head>
@@ -15,35 +15,13 @@
             <img src="https://www.shutterstock.com/image-vector/ex-letter-logo-design-alphabet-260nw-2368409513.jpg"
                 alt="Logo" width="30" height="35" class="u-inline-block ">
             <h1 style="display: inline-block;">Expense Tracker</h1>
-            <h4 id="pree" style="display: block; float:right; visibility:hidden;">premium user</h4>
-            <button id="rzp-button1" onclick="onPaybutton()" style="display: flex; float: right;">Buy Premium</button>
         </div>
         <div id="ldr-nav" style="width: 100%; visibility:hidden;">
-            <button id="ldr-button" class="btn btn-primary" onclick="onLeaderButton()">LeaderBoard</button>
-            <button id="rep-button" class="btn btn-primary" onclick="onReportButton()">Report</button>
-            <button id="logout" class="btn btn-primary" onclick="onLogoutButton()">Logout</button>
+            <!-- <button id="ldr-button" class="btn btn-primary" onclick="onLeaderButton()">LeaderBoard</button> -->
         </div>
-        <div class="my-form">
-            <form action="" class="mainf" method="">
-                <label for="title">Title</label>
-                <input type="text" name="title" id="title">
-                <label for="price">Price</label>
-                <input type="number" name="price" id="price">
-                <label for="description">Category</label>
-                <select class="form-control" type="text" name="description" id="description"
-                    style="width: 150px; display: inline-block; ">
-                    <option>Food</option>
-                    <option>Fuel</option>
-                    <option>Movie</option>
-                    <option>other</option>
-                </select>
-                <div class="sub my-3">
-                    <input type="submit" class="btn btn-success" value="Submit">
-                </div>
-            </form>
-        </div>
+        
         <div class="show">
-            <h2 class="showExpense"></h2>
+            <h2 class="showExpense">REPORT</h2>
             <ul class="items">
                 
             </ul>
@@ -57,7 +35,6 @@
         </div>
     </div>
 
-    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
     <script src="./expense.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"

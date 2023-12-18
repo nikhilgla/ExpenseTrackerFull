@@ -168,3 +168,15 @@ async function onLeaderButton() {
         showleaderboard(element);
     });
 }
+
+async function onReportButton() {
+    console.log("inside report button");
+    window.open("./report.html", "_blank")
+}
+
+async function onLogoutButton() {
+    console.log("inside logout");
+    localStorage.removeItem("token");
+    window.location.href = "./login.html"
+
+}
