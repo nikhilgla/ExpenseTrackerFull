@@ -171,7 +171,11 @@ async function onLeaderButton() {
 
 async function onReportButton() {
     console.log("inside report button");
-    window.open("./report.html", "_blank")
+    
+    const token = localStorage.getItem('token');
+    const response = await axios.get('http://localhost:5000/premium/showleader', { headers: { "Authorization": token } }).then(console.log("donr"))
+    // window.open("./report.html", "_blank")
+
 }
 
 async function onLogoutButton() {
