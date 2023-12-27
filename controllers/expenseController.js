@@ -4,7 +4,14 @@ const User = require('../models/users');
 const sequelize = require('../util/database');
 
 exports.getData = async (req, res, next) => {
-  const data = await Expense.findAll({ where: { userstableId: req.user.id } });
+  console.log(req.query);
+  const page = req.query.page;
+
+  const data = await Expense.findAll({
+    where: { userstableId: req.user.id },
+    offset: (page-1)*10 ,
+    limit: 10
+  });
   // {where : {userstableId : req.user.id}}
   res.status(200).json({ AllData: data, isPremium: req.user.ispremium });
 };
@@ -57,9 +64,9 @@ exports.deleteData = async (req, res, next) => {
       await t.rollback();
       return res.status(500).json({ success: false, error: err });
     })
-    
+
   })
-    .catch(async(err) => {
+    .catch(async (err) => {
       console.log(err);
       await t.rollback();
       return res.status(500).json({ success: false, message: "not deleting some error" })

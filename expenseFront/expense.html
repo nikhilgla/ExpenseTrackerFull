@@ -18,7 +18,7 @@
             <h4 id="pree" style="display: block; float:right; visibility:hidden;">premium user</h4>
             <button id="rzp-button1" onclick="onPaybutton()" style="display: flex; float: right;">Buy Premium</button>
         </div>
-        <div id="ldr-nav" style="width: 100%; visibility:hidden;">
+        <div id="ldr-nav" style="width: 100%;">
             <button id="ldr-button" class="btn btn-primary" onclick="onLeaderButton()">LeaderBoard</button>
             <button id="rep-button" class="btn btn-primary" onclick="onReportButton()">Report</button>
             <button id="logout" class="btn btn-primary" onclick="onLogoutButton()">Logout</button>
@@ -47,6 +47,15 @@
             <ul class="items">
                 
             </ul>
+            <nav aria-label="Page navigation example">
+                <ul class="pagination justify-content-center">
+                  <!-- <li class="page-item"><button class="page-link" href="#">Previous</button></li> -->
+                  <li class="page-item"><button class="btn btn-secondary" onclick="getPages(1)">1</button></li>
+                  <li class="page-item"><button class="btn btn-secondary" onclick="getPages(2)">2</button></li>
+                  <li class="page-item"><button class="btn btn-secondary" onclick="getPages(3)">3</button></li>
+                  <!-- <li class="page-item"><button class="page-link" href="#">Next</button></li> -->
+                </ul>
+              </nav>
         </div>
         <br>
         <div>

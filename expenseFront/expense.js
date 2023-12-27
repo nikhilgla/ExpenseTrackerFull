@@ -13,10 +13,11 @@ var showExpense = document.querySelector('.showExpense');
 
 myForm.addEventListener('submit', onSubmit);
 // var total = Number("0");
+var premium = false;
 
-window.addEventListener('DOMContentLoaded', () => {
+window.addEventListener('DOMContentLoaded', async() => {
     const token = localStorage.getItem('token');
-    axios.get('http://localhost:5000/expense/data', { headers: { "Authorization": token } })
+    await axios.get('http://localhost:5000/expense/data?page=1', { headers: { "Authorization": token } })
         .then((ele) => {
             console.log(ele);
             if (ele.data.AllData.length > 0) {
@@ -33,12 +34,32 @@ window.addEventListener('DOMContentLoaded', () => {
 
 })
 
+async function getPages(page){
+    const token = localStorage.getItem('token');
+    await axios.get(`http://localhost:5000/expense/data?page=${page}`, { headers: { "Authorization": token } })
+        .then((ele) => {
+            console.log(ele);
+            if (ele.data.AllData.length > 0) {
+                const ch = 'Expense List';
+                showExpense.innerHTML = ch;
+            }
+            itemList.innerHTML = '';
+            for (var i = 0; i < ele.data.AllData.length; i++) {
+                
+                showOnScreen(ele.data.AllData[i]);
+            }
+        })
+        .catch((err) => { console.log(err); })
+
+}
+
 async function checkPremium(ele) {
     if (ele === true) {
         console.log("premium hai bhai");
         document.getElementById("rzp-button1").style.visibility = "hidden";
         document.getElementById("pree").style.visibility = "visible";
         document.getElementById("ldr-nav").style.visibility = "visible";
+        premium = true;
     }
     else {
         console.log("nhi hai premium");
@@ -154,27 +175,37 @@ async function onPaybutton() {
 }
 
 async function onLeaderButton() {
-    console.log("inside leaderboard button");
+    if (premium == true) {
+        console.log("inside leaderboard button");
 
-    const token = localStorage.getItem('token');
-    const response = await axios.get('http://localhost:5000/premium/showleader', { headers: { "Authorization": token } });
+        const token = localStorage.getItem('token');
+        const response = await axios.get('http://localhost:5000/premium/showleader', { headers: { "Authorization": token } });
 
-    console.log(response.data.leaderDetails);
+        console.log(response.data.leaderDetails);
 
-    const ch = 'LeaderBoard';
-    showleader.innerHTML = showleader.innerHTML + ch;
+        const ch = 'LeaderBoard';
+        showleader.innerHTML = showleader.innerHTML + ch;
 
-    response.data.leaderDetails.forEach(element => {
-        showleaderboard(element);
-    });
+        response.data.leaderDetails.forEach(element => {
+            showleaderboard(element);
+        });
+    }
+    else {
+        alert("Buy Premium");
+    }
 }
 
 async function onReportButton() {
-    console.log("inside report button");
-    
-    const token = localStorage.getItem('token');
-    const response = await axios.get('http://localhost:5000/premium/showleader', { headers: { "Authorization": token } }).then(console.log("donr"))
-    // window.open("./report.html", "_blank")
+    if (premium == true) {
+        console.log("inside report button");
+
+        const token = localStorage.getItem('token');
+        const response = await axios.get('http://localhost:5000/premium/showleader', { headers: { "Authorization": token } }).then(console.log("donr"))
+        // window.open("./report.html", "_blank")
+    }
+    else {
+        alert("Buy Premium")
+    }
 
 }
 
