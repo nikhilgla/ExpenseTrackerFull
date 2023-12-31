@@ -10,23 +10,42 @@ var showleader = document.querySelector('.showleader');
 var showExpense = document.querySelector('.showExpense');
 
 // var tot = document.querySelector('.totalamount');
+var limit = document.querySelector('#lmt');
+
+if (localStorage.getItem('lim') === null) {
+    limit.value = Number(10);
+}
+else {
+    limit.value = localStorage.getItem('lim');
+}
 
 myForm.addEventListener('submit', onSubmit);
 // var total = Number("0");
 var premium = false;
 
-window.addEventListener('DOMContentLoaded', async() => {
+window.addEventListener('DOMContentLoaded', async () => {
+    let l1 = limit.value
+
     const token = localStorage.getItem('token');
-    await axios.get('http://localhost:5000/expense/data?page=1', { headers: { "Authorization": token } })
+    await axios.get(`http://localhost:5000/expense/data?page=1&limit=${l1}`, { headers: { "Authorization": token } })
         .then((ele) => {
             console.log(ele);
             if (ele.data.AllData.length > 0) {
                 const ch = 'Expense List';
                 showExpense.innerHTML = showExpense.innerHTML + ch;
+
+                const chh = `<tr class="table-info">
+                    <th scope="col">#</th>
+                    <th scope="col">Expense</th>
+                    <th scope="col">Amount</th>
+                    <th scope="col">Type</th>
+                    <th scope="col">Delete</th>
+                    </tr>`
+                document.querySelector('.headOfexpense').innerHTML = chh;
             }
 
             for (var i = 0; i < ele.data.AllData.length; i++) {
-                showOnScreen(ele.data.AllData[i]);
+                showOnScreen(ele.data.AllData[i], i + 1);
             }
             checkPremium(ele.data.isPremium);
         })
@@ -34,9 +53,10 @@ window.addEventListener('DOMContentLoaded', async() => {
 
 })
 
-async function getPages(page){
+async function getPages(page) {
+    const ll = limit.value;
     const token = localStorage.getItem('token');
-    await axios.get(`http://localhost:5000/expense/data?page=${page}`, { headers: { "Authorization": token } })
+    await axios.get(`http://localhost:5000/expense/data?page=${page}&limit=${ll}`, { headers: { "Authorization": token } })
         .then((ele) => {
             console.log(ele);
             if (ele.data.AllData.length > 0) {
@@ -45,8 +65,13 @@ async function getPages(page){
             }
             itemList.innerHTML = '';
             for (var i = 0; i < ele.data.AllData.length; i++) {
-                
-                showOnScreen(ele.data.AllData[i]);
+
+                showOnScreen(ele.data.AllData[i], i + 1);
+            }
+            localStorage.setItem('lim', ll)
+            if(page >= 3){
+                const pp = `<li class="page-item"><button class="btn btn-secondary" onclick="getPages(${page+1})">${page+1}</button></li>`
+                document.querySelector('.pagination').innerHTML = document.querySelector('.pagination').innerHTML + pp;
             }
         })
         .catch((err) => { console.log(err); })
@@ -81,7 +106,7 @@ async function onSubmit(e) {
         await axios.post('http://localhost:5000/expense/data', myObj, { headers: { "Authorization": token } })
             .then((ele) => {
                 console.log(ele.data);
-                showOnScreen(ele.data.newExpenseDetail)
+                showOnScreen(ele.data.newExpenseDetail, 'new')
             })
             .catch((err) => { console.log(err); })
 
@@ -92,13 +117,24 @@ async function onSubmit(e) {
     }
 }
 
-async function showOnScreen(userObj) {
-    const childli = `<li class="item" id=${userObj.title}>${userObj.title} - ${userObj.price} - ${userObj.description} <button onclick=deleteExp('${userObj.title}','${userObj.id}') class="btn btndel btn-danger btn-sm float-right delete">X</button>  <button onclick=insExp('${userObj.title}','${userObj.id}') class="btn btn-success btn-sm float-right delete" style=" visibility:hidden;">Ins</button></li>`
-    itemList.innerHTML = itemList.innerHTML + childli;
+async function showOnScreen(userObj, c1) {
+    // const childli = `<li class="item" id=${userObj.title}>${userObj.title} - ${userObj.price} - ${userObj.description} <button onclick=deleteExp('${userObj.title}','${userObj.id}') class="btn btndel btn-danger btn-sm float-right delete">X</button>  <button onclick=insExp('${userObj.title}','${userObj.id}') class="btn btn-success btn-sm float-right delete" style=" visibility:hidden;">Ins</button></li>`
+    const childtr = `<tr id=${userObj.title} class="table-info">
+    <th scope="row">${c1}</th>
+    <td>${userObj.title}</td>
+    <td>${userObj.price}</td>
+    <td>${userObj.description}</td>
+    <td><button onclick=deleteExp('${userObj.title}','${userObj.id}') class="btn btndel btn-danger btn-sm float-right delete">X</button></td>
+  </tr>`
+    itemList.innerHTML = itemList.innerHTML + childtr;
 }
 
-async function showleaderboard(userObj) {
-    const childli = `<li class="litem" id=${userObj.name}>${userObj.name} - ${userObj.totalAmount} </li>`
+async function showleaderboard(userObj, c1) {
+    const childli = `<tr>
+    <th scope="row">${c1}</th>
+    <td>${userObj.name}</td>
+    <td>${userObj.totalAmount}</td>
+  </tr>`
     leaderItems.innerHTML = leaderItems.innerHTML + childli;
 }
 
@@ -184,11 +220,21 @@ async function onLeaderButton() {
         console.log(response.data.leaderDetails);
 
         const ch = 'LeaderBoard';
-        showleader.innerHTML = showleader.innerHTML + ch;
+        showleader.innerHTML = ch;
+        const chh = `<tr>
+        <th scope="col">#</th>
+        <th scope="col">Name</th>
+        <th scope="col">Total Amount</th>
+      </tr>`
+        document.querySelector('.headOfleader').innerHTML = chh;
 
+        var c1 = 1;
+        leaderItems.innerHTML = '';
         response.data.leaderDetails.forEach(element => {
-            showleaderboard(element);
+            showleaderboard(element, c1);
+            c1 = c1 + 1;
         });
+        window.scrollBy(0,1000);
     }
     else {
         alert("Buy Premium");

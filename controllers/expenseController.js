@@ -6,11 +6,12 @@ const sequelize = require('../util/database');
 exports.getData = async (req, res, next) => {
   console.log(req.query);
   const page = req.query.page;
+  const lmt = req.query.limit;
 
   const data = await Expense.findAll({
     where: { userstableId: req.user.id },
-    offset: (page-1)*10 ,
-    limit: 10
+    offset: (page-1)*lmt ,
+    limit: Number(lmt)
   });
   // {where : {userstableId : req.user.id}}
   res.status(200).json({ AllData: data, isPremium: req.user.ispremium });
