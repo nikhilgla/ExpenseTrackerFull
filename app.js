@@ -1,8 +1,11 @@
 const path = require('path');
 
 const express = require('express');
+require('dotenv').config()
 const bodyParser = require('body-parser');
 const sequelize = require('./util/database');
+const helmet = require('helmet')
+
 
 const Expense = require('./models/expensetable');
 const Users = require('./models/users');
@@ -13,6 +16,7 @@ const cors = require('cors');
 
 const app = express();
 app.use(cors())
+app.use(helmet());
 
 app.set('view engine', 'ejs');
 app.set('views', 'views');
@@ -45,7 +49,7 @@ sequelize
   .sync()
   .then(result => {
     // console.log(result);
-    app.listen(5000);
+    app.listen(process.env.PORT);
   })
   .catch(err => {
     console.log(err);

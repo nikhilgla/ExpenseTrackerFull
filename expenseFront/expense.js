@@ -182,7 +182,7 @@ async function onPaybutton() {
 
     const token = localStorage.getItem('token');
     const response = await axios.get('http://localhost:5000/purchase/buypremium', { headers: { "Authorization": token } });
-    console.log(response, "<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
+    console.log(response);
 
     var options = {
         "key": response.data.key_id,
